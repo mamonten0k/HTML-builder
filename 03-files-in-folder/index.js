@@ -1,27 +1,21 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require('fs/promises');
 
-function readRecursive(currPath) {
-  fs.readdir(currPath, { withFileTypes: true }, (err, files) => {
-    if (err) console.log(err);
-    else {
-      files.forEach((file) => {
-        if (file.isFile()) {
-          fs.stat(`${currPath}/${file.name}`, (err, stats) => {
-            console.log(
-              file.name.split('.')[0] || 'system file (has no name)',
-              '-',
-              file.name.split('.')[1],
-              '-',
-              (stats.size / 1024).toFixed(3) + ' Kb'
-            );
-          });
-        } else if (file.isDirectory()) {
-          readRecursive(`${currPath}/${file.name}`);
-        }
-      });
+async function readRecursive(currPath) {
+  const files = await fs.readdir(currPath, { withFileTypes: true });
+  for (let file of files) {
+    if (file.isFile()) {
+      let stats = await fs.stat(`${currPath}/${file.name}`);
+      console.log(
+        file.name.split('.')[0] || 'system file (has no name)',
+        '-',
+        file.name.split('.')[1],
+        '-',
+        (stats.size / 1024).toFixed(3) + ' Kb'
+      );
+    } else {
+      readRecursive(`${currPath}/${file.name}`);
     }
-  });
+  }
 }
 
 readRecursive('./03-files-in-folder/secret-folder');
