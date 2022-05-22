@@ -1,18 +1,22 @@
 const fs = require('fs');
+const { createWriteStream } = require('fs');
 const rl = require('readline').createInterface({
   input: process.stdin,
   output: process.stdout,
 });
 
-rl.question('What is your name? ', (data) => {
-  appendToFile(data.toString());
-  rl.close();
+const writableStream = createWriteStream(`${__dirname}/text.txt`);
+
+console.log('Type something on console, please: \n');
+
+rl.on('line', (data) => {
+  if (data.toString() === 'exit') onclose();
+  writableStream.write(`${data.toString()}\r\n`);
 });
 
-function appendToFile(data) {
-  fs.writeFile('./02-write-file/text.txt', data, (err) => {
-    if (err) {
-      console.error(err);
-    }
-  });
+rl.on('close', onCLose);
+
+function onCLose() {
+  console.log('Thanks for you coomperation!!!');
+  rl.close();
 }
