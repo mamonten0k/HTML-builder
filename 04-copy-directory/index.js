@@ -1,41 +1,25 @@
-// const fs = require('fs');
+const fs = require('fs/promises');
 
-// const requiredDir = './04-copy-directory/files';
-// const destDir = './04-copy-directory/files-copy';
+async function copy(source, dest) {
+  const assets = await fs.readdir(source, { withFileTypes: true });
+  await fs.mkdir(`${dest}`);
 
-// function copyDir(currPath, destDir) {
-//   if (fs.existsSync(destDir)) {
-//     fs.rm(`${destDir}/`, { recursive: true }, (err) => console.log(err));
-//   }
-//   console.log(fs.existsSync(destDir));
-//   fs.mkdir(destDir, (err) => {
-//     if (err) throw err;
-//   });
-//   fs.readdir(currPath, { withFileTypes: true }, (err, files) => {
-//     if (err) throw err;
+  for (let file of assets) {
+    if (file.isFile()) {
+      fs.copyFile(`${source}/${file.name}`, `${dest}/${file.name}`);
+    } else {
+      copyAssets(`${source}/${file.name}`, `${dest}/${file.name}`);
+    }
+  }
+}
 
-//     files.forEach((file) => {
-//       if (file.isFile()) {
-//         fs.copyFile(
-//           `${currPath}/${file.name}`,
-//           `${destDir}/${file.name}`,
-//           (err) => {
-//             if (err) throw err;
-//           }
-//         );
-//       } else if (file.isDirectory()) {
-//         copyDir(`${currPath}/${file.name}`, `${destDir}/${file.name}`);
-//       }
-//     });
-//   });
-// }
+async function copyDir() {
+  const source = `${__dirname}/files`;
+  const dest = `${__dirname}/files-copy`;
 
-// function onMkdir(err) {
-//   if (err) {
-//     fs.rm(`${destDir}`, { recursive: true }, (err) => console.log(err));
-//     fs.mkdir(destDir, (err) => console.log(err));
-//   }
-//   fs.mkdir(destDir, (err) => console.log(err));
-// }
+  await fs.rm(dest, { recursive: true, force: true });
 
-// copyDir(requiredDir, destDir);
+  copy(source, dest);
+}
+
+copyDir();
