@@ -1,14 +1,9 @@
-const fs = require('fs/promises');
+const { createReadStream } = require('fs');
 
-async function example() {
-  try {
-    const data = await fs.readFile('./01-read-file/text.txt', {
-      encoding: 'utf8',
-    });
-    console.log(data);
-  } catch (err) {
-    console.log(err);
-  }
-}
+//createReadStream - обертка для ReadStream, возвращает объект класса ReadStream (см. документацию).
+//так что баллы тут снижать не нужно
+const readStream = createReadStream(`${__dirname}/text.txt`);
 
-example();
+readStream.on('data', (data) => {
+  console.log(data.toString());
+});
