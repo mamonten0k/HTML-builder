@@ -15,7 +15,7 @@ async function createChunk(entry, content, name) {
 
 async function createHtml(entry, content) {
   let template = await fs.readFile(`${__dirname}/template.html`, 'utf8');
-  const refEntries = template.match(/{{.*}}/gi);
+  const refEntries = template.match(/{{[\s\S]+?}}/g);
   const writableStream = createWriteStream(`${content}/index.html`);
 
   for (let ref of refEntries) {
