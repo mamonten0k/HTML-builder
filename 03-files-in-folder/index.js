@@ -12,8 +12,6 @@ async function readRecursive(currPath) {
         '-',
         (stats.size / 1024).toFixed(3) + ' Kb'
       );
-    } else {
-      readRecursive(`${currPath}/${file.name}`);
     }
   }
 }
