@@ -1,6 +1,6 @@
 const fs = require('fs/promises');
 
-async function copy(source, dest) {
+async function copyAssets(source, dest) {
   const assets = await fs.readdir(source, { withFileTypes: true });
   await fs.mkdir(`${dest}`);
 
