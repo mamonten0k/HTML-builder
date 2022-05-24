@@ -9,7 +9,10 @@ const writableStream = createWriteStream(`${__dirname}/text.txt`);
 console.log('Type something on console, please: \n');
 
 rl.on('line', (data) => {
-  if (data.toString() === 'exit') rl.close();
+  if (data.toString() === 'exit') {
+    rl.close();
+    return;
+  }
   writableStream.write(`${data.toString()}\r\n`);
 });
 
