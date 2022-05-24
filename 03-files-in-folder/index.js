@@ -6,9 +6,12 @@ async function readRecursive(currPath) {
     if (file.isFile()) {
       let stats = await fs.stat(`${currPath}/${file.name}`);
       console.log(
-        file.name.split('.')[0] || 'system file (has no name)',
+        file.name
+          .split('.')
+          .splice(0, file.name.split('.').length - 1)
+          .join('.') || 'system file (has no name)',
         '-',
-        file.name.split('.')[1],
+        file.name.split('.').pop(),
         '-',
         (stats.size / 1024).toFixed(3) + ' Kb'
       );
