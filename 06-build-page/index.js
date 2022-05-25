@@ -7,7 +7,7 @@ async function createChunk(entry, content, name) {
 
   //reverse, потому что стили для footer в ином случае не читаются
   files.reverse().forEach((file) => {
-    if (file.isFile() && file.name.split('.')[1] === 'css') {
+    if (file.isFile() && file.name.split('.').pop() === 'css') {
       createReadStream(`${entry}/${file.name}`, 'utf8').pipe(writableStream);
     }
   });
