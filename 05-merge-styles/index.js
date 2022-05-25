@@ -10,7 +10,7 @@ async function makeCssBundle() {
   const files = await fs.readdir(entry, { withFileTypes: true });
 
   files.forEach((file) => {
-    if (file.isFile() && file.name.split('.')[1] === 'css') {
+    if (file.isFile() && file.name.split('.').pop() === 'css') {
       createReadStream(`${entry}/${file.name}`, 'utf8').pipe(writableStream);
     }
   });
