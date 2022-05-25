@@ -19,7 +19,7 @@ async function copyDir() {
 
   await fs.rm(dest, { recursive: true, force: true });
 
-  copy(source, dest);
+  copyAssets(source, dest);
 }
 
 copyDir();
